@@ -10,4 +10,4 @@
 	       :cepl.sdl2
 	       :nineveh
 	       :rtg-math)
-  :components ((:file "cepl-test")))
+  :components ((:file "cepltest")))
