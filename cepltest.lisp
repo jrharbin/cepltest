@@ -2,6 +2,7 @@
 		    :common-lisp
 		    :cl-user
 		    :cepl
+		    :vari
 		    :nineveh
 		    :rtg-math))
 
@@ -24,7 +25,10 @@
 		 &uniform (mat :mat4)
 		 (offset :vec3)
 		 (perspective :mat4))
-  (let* ((vert (* perspective (+ (* mat (v! pos 1)) (v! offset 1))))
+  (let* ((id gl-instance-id)
+	 (vert (* perspective (+ (* mat (v! pos 1))
+				 (v! offset 0)
+				 (v! (* (1- id) 2) 0 0 0))))
 	 (col (+ pos (v! 0.5 0.5 0.5))))
     (values vert (:smooth col))))
 
@@ -46,7 +50,8 @@
   (set-res)
   (step-host)
   (clear)
-  (map-g #'pipe-test *buf-stream* :mat mat :offset offset :perspective *persp*)
+  (with-instances 3
+    (map-g #'pipe-test *buf-stream* :mat mat :offset offset :perspective *persp*))
   (swap))
 
 (defun now () (/ (get-internal-real-time) 5000.0))
@@ -54,12 +59,12 @@
 (defparameter *shape* 'cube)
 
 (nineveh:def-simple-main-loop testloop (:on-start (lambda () (init *shape*)))
-  (let ((offsetx (sin (/ (get-internal-real-time) 1500.0)))
+  (let ((offsetx (sin (/ (get-internal-real-time) 254.0)))
 	(offsety (cos (/ (get-internal-real-time) 200.0))))
     (draw-with-matrix
      :mat
      (rtg-math.matrix4:* (rtg-math.matrix4:rotation-z (now))
 			 (rtg-math.matrix4:rotation-x (/ (now) 0.5)))
-     :offset (v! offsetx offsety -2.5f0))))
+     :offset (v! offsetx offsety -5.5f0))))
 
 (testloop :start)
