@@ -9,5 +9,7 @@
   :depends-on (:cepl
 	       :cepl.sdl2
 	       :nineveh
-	       :rtg-math)
+	       :rtg-math
+	       :dirt
+	       :cepl.skitter.sdl2)
   :components ((:file "cepltest")))
